@@ -1,0 +1,31 @@
+import { test, expect } from '@playwright/test';
+
+test('test', async ({ page }) => {
+  await page.goto('https://nwc-portal-dev.united-builders.net/en/');
+  await page.getByRole('link', { name: 'Create Account', exact: true }).click();
+  await page.getByRole('link', { name: 'Create Account' }).click();
+  await expect(page.getByLabel('First name')).toBeVisible();
+  await expect(page.getByLabel('First name')).toBeEmpty();
+  await page.getByLabel('First name').click();
+  await page.getByLabel('First name').fill('yaraa');
+  await page.getByLabel('Last name').click();
+  await page.getByLabel('Last name').fill('Ahmed');
+  await page.getByLabel('Email').click();
+  await page.getByLabel('Email').fill('mona+57575@cloudypedia.net');
+  await page.getByLabel('Phone number').click();
+  await page.getByLabel('Phone number').fill('0587464568');
+  await page.getByLabel('- Select -').click();
+  await page.getByRole('option', { name: 'test', exact: true }).click();
+  //await page.locator('#edit-organization-profiles-0-entity-field-organization-categories-wrapper--Ylk4O7wup6M').getByRole('combobox').click();
+  await page.getByRole('option', { name: 'Identity' }).click();
+  await page.getByRole('option', { name: 'Identity' }).click();
+  await page.getByRole('option', { name: 'Identity' }).click();
+  await page.locator('#edit-organization-profiles-0-entity-field-organization-categories-wrapper--Ylk4O7wup6M').getByRole('combobox').click();
+  await page.locator('#edit-organization-profiles-0--7qVpPkgaztc div').filter({ hasText: 'Organization Organization' }).first().click();
+  await page.getByText('Register a new account First').click();
+  await page.getByText('Register a new account First').click();
+  await page.getByRole('button', { name: 'Send' }).click();
+  await page.getByLabel('Status message').click();
+  await page.getByLabel('Error message').click();
+  await expect(page.getByLabel('Status message')).toBeVisible();
+});
