@@ -12,12 +12,15 @@
   "devDependencies": {
     "@playwright/test": "^1.46.0",
     "@types/node": "^20.12.12",
-    "dotenv": "^16.4.5"
+    "dotenv": "^16.6.1"
   },
   "dependencies": {
     "-": "^0.0.1",
     "csv": "^6.3.10",
+    "csv-parse": "^5.6.0",
     "csv-parser": "^3.0.0",
+    "fast-csv": "^5.0.1",
+    "fs": "^0.0.1-security",
     "parse": "^5.3.0"
   }
 }
