@@ -23,7 +23,7 @@ test.setTimeout(60000);
 
 // Run a test for each user in JSON
 for (const user of users) {
-  test(`Add User 2Roles with Valid Data - ${user.username}`, async ({ page }) => {
+  test(`Add User - ${user.username}`, async ({ page }) => {
     //  Navigate To Add User by link create user Page 
     // await page.goto('${baseURL}/admin/people/create'); 
 
