@@ -47,7 +47,7 @@ test('AdminAddUserContentEditor', async ({ page }) => {
    await page.waitForSelector('id=edit-roles-authenticated'); // wait first
    // Store whether it's hidden
 
-   const Authenticated=await page.locator('id=edit-roles-authenticated').isHidden();
+   const Authenticated =await page.locator('id=edit-roles-authenticated').isHidden();
    // Then assert with Playwright's expect
    await expect(page.locator('id=edit-roles-authenticated')).toBeVisible();
    await expect(page.locator('id=edit-roles-authenticated')).toBeDisabled();

@@ -1,0 +1,49 @@
+{
+  "create": [
+    
+    {
+   "title": "HTML Format",
+   "body": "Using Full HTML",
+   "text_format": "full_html"
+    },
+    {
+      "title": "Valid Basic Page Title",
+      "body": "This is the Basic Page body.",
+      "expected": "has been created"
+    },
+    {
+      "title": "Minimal Basic Page",
+      "body": "",
+      
+      "expected": "has been created"
+    },
+    {
+      "title": "!@#$%^&*()_+{}|:\"<>?",
+      "body": "Body with special title.",
+
+      "expected": "has been created"
+    }
+    
+
+  ],
+  "update": [
+    {
+      "id": 85,
+      "title": "Updated Title",
+      "body": "Updated body content.",
+      "expected": "has been updated"
+    }
+  ],
+  "delete": [
+    {
+      "pageId": 86,
+      "expected": "has been deleted"
+    }
+  ],
+  "Preview": [
+    {
+      "pageId": 85,
+      "expected": "has been deleted"
+    }
+  ]
+}

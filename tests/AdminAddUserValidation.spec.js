@@ -429,10 +429,8 @@ test.describe('Add User - Positive & Negative Scenarios', () => {
      await page.fill('id=edit-pass-pass1', 'monaqc123*Test');
      await page.fill('id=edit-pass-pass2', 'monaqc123*Test');
      await page.click("//input[@id='edit-submit']");
-
      await expect(page.locator("//h2[@id='message-error-title']")).toContainText('Error message');
      await expect(page.locator("//div[@class='messages__content']")).toContainText(' The username cannot begin with a space.');
-    
      
     });
     test('Show Error if Password have space_20 ', async ({ page }) => {

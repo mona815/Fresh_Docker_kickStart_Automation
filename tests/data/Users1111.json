@@ -1,0 +1,43 @@
+{
+  "create": [
+    {
+      "mail": "mona+50@cloudypedia.net",
+      "name": "mona50",
+      "pass1": "monaqc123*Test",
+      "pass2": "monaqc123*Test",
+      "picture":"validEsoo.jpg",
+      "expected": "The changes have been saved"
+    },
+    {
+      "title": "Minimal Article",
+      "body": "",
+      "tags": "",
+      "image": null,
+      "expected": "has been created"
+    },
+    {
+      "title": "!@#$%^&*()_+{}|:\"<>?",
+      "body": "Body with special title.",
+      "tags": "",
+      "image": null,
+      "expected": "has been created"
+    }
+  ],
+  "update": [
+    {
+      "userId": 52,
+      "mail": "Updated mona+501@cloudypedia.net",
+      "name": "Updated mona501",
+      "pass1": "monaqc123*Test",
+      "pass2": "monaqc123*Test",
+      "picture":"validEsoo.jpg",
+      "expected": "The changes have been saved"
+    }
+  ],
+  "delete": [
+    {
+      "userId": 52,
+      "expected": "has been deleted"
+    }
+  ]
+}

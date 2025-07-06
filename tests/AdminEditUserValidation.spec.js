@@ -87,8 +87,6 @@ test.afterEach(async ({ page }, testInfo) => {
    const checkbox = page.locator('id=edit-roles-content-editor');
    await checkbox.uncheck(); // Uncheck it
    await expect(checkbox).not.toBeChecked(); // Confirm it is unchecked
-
-
    // Check Administrator
    await page.waitForSelector('id=edit-roles-administrator'); // wait first
    await page.check('id=edit-roles-administrator'); // then check so this user name has Administrator 
@@ -145,4 +143,9 @@ test.afterEach(async ({ page }, testInfo) => {
    console.log('Content Message is:',messageText);
    await expect (page.locator("//div[@class='messages__content']")).toBeVisible();
    
+ });
+ test('Unauthorized user attempts to edit', async ({ page }) => {
+   await page.goto(`${baseURL}/user/logout`);
+   await page.goto(`${baseURL}/node/${userId}/edit`);
+   await expect(page.locator('body')).toContainText('You are not authorized');
  });
