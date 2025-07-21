@@ -1,43 +1,56 @@
-{
-  "create": [
-    {
-      "mail": "mona+50@cloudypedia.net",
-      "name": "mona50",
-      "pass1": "monaqc123*Test",
-      "pass2": "monaqc123*Test",
-      "picture":"validEsoo.jpg",
-      "expected": "The changes have been saved"
-    },
-    {
-      "title": "Minimal Article",
-      "body": "",
-      "tags": "",
-      "image": null,
-      "expected": "has been created"
-    },
-    {
-      "title": "!@#$%^&*()_+{}|:\"<>?",
-      "body": "Body with special title.",
-      "tags": "",
-      "image": null,
-      "expected": "has been created"
+[
+  {
+    "description": "Valid Content Editor User",
+    "email": "mona+131177@cloudypedia.net",
+    "username": "mona131177",
+    "password": "monaqc123*Test",
+    "roles": ["content-editor"],
+    "expected": {
+      "success": true
     }
-  ],
-  "update": [
-    {
-      "userId": 52,
-      "mail": "Updated mona+501@cloudypedia.net",
-      "name": "Updated mona501",
-      "pass1": "monaqc123*Test",
-      "pass2": "monaqc123*Test",
-      "picture":"validEsoo.jpg",
-      "expected": "The changes have been saved"
+  },
+  {
+    "description": "Valid administrator User",
+    "email": "mona+13111977@cloudypedia.net",
+    "username": "mona13111977",
+    "password": "monaqc123*Test",
+    "roles": ["administrator"],
+    "expected": {
+      "success": true
     }
-  ],
-  "delete": [
-    {
-      "userId": 52,
-      "expected": "has been deleted"
+  },
+  {
+    "description": "Username Already Exists",
+    "email": "mona+12@cloudypedia.net",
+    "username": "mona2",
+    "password": "monaqc123*Test",
+    "roles": ["content-editor"],
+    "expected": {
+      "success": false,
+      "errorMessage": "The username existing_user is already taken."
     }
-  ]
-}
+  },
+  {
+    "description": "Invalid Email Format",
+    "email": "mona+3@cloudypedia",
+    "username": "mona3",
+    "password": "monaqc123*Test",
+    "roles": ["administrator"],
+    "expected": {
+      "success": false,
+      "errorMessage": "This value is not a valid email address."
+    }
+  },
+  {
+    "description": "Passwords Don't Match",
+    "email": "mona+4@cloudypedia.net",
+    "username": "mona4",
+    "password": "monaqc123*Test",
+    "confirmPassword": "differentPassword",
+    "roles": ["content-editor"],
+    "expected": {
+      "success": false,
+      "errorMessage": "The specified passwords do not match."
+    }
+  }
+]

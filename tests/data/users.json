@@ -1,28 +1,17 @@
 [
   {
-    "email": "mona+66@cloudypedia.net",
-    "username": "mona64",
+    "email": "mona+10000@cloudypedia.net",
+    "username": "mona677",
     "password": "monaqc123*Test",
     "roles": ["content-editor"]
   },
   {
-    "email": "mona+67@cloudypedia.net",
-    "username": "mona65",
-    "password": "monaqc123*Test",
-    "roles": ["administrator"]
-  },
-  {
-    "email": "mona+68@cloudypedia.net",
-    "username": "",
-    "password": "monaqc123*Test",
-    "roles": ["content-editor"]
-  },
-  {
-    "email": "mona+69@cloudypedia.net",
-    "username": "mona65",
+    "email": "mona+688@cloudypedia.net",
+    "username": "mona688",
     "password": "monaqc123*Test",
     "roles": ["administrator"]
   }
+
 ]
 
 

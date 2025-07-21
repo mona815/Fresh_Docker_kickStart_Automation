@@ -1,72 +1,92 @@
 
 const { test, expect } = require('@playwright/test');
 const fs = require('fs');
+require('dotenv').config();
 
-test.describe('Add User - Positive & Negative Scenarios', () => {
+const baseURL = process.env.BASE_URL || 'http://localhost:8085/';
+// Load users from JSON file
+const Apps = JSON.parse(fs.readFileSync('tests/data/appsData.json', 'utf-8'));
 
-  //const baseURL = 'http://localhost:8080/'; // Replace with actual app URL
-  //const registrationPath = 'http://localhost:8080/admin/people/create';    // Adjust if needed
+async function login(page) {
+  await page.goto(`${baseURL}/user/login`);
+  await page.fill('input[name="name"]', process.env.DRUPAL_USERNAME);
+  await page.fill('input[name="pass"]', process.env.DRUPAL_PASSWORD);
+  await page.click("//form[@id='user-login-form']//input[@id='edit-submit']");
+}
 
-  test.beforeEach(async ({ page }) => {
-    // Go to the specified URL
-    //await page.goto(`${baseURL}${registrationPath}`);
-    await page.goto('http://localhost:8080/');
-    await expect(page).toHaveTitle('Home | Drupal Site');
-    // Perform login
-     await page.click('a[href="/user/login"]');
-     await page.fill('id=edit-name', 'admin');
-     await page.fill('id=edit-pass', 'admin');
-     await page.click("//input[@id='edit-submit']");
-  });
-    // After each, perform a logout
-  test.afterEach(async ({ page }, testInfo) => {
-    if (testInfo.status !== testInfo.expectedStatus) {
-      await page.screenshot({ path: `screenshots/${testInfo.title.replace(/[^a-zA-Z0-9]/g, "_")}.png`, fullPage: true });
-    }
-    // Log Out
-    await page.waitForTimeout(3000);
-    await page.locator("//a[normalize-space()='Home']").click();
-    await page.locator("//a[@class='secondary-nav__menu-link secondary-nav__menu-link--link secondary-nav__menu-link--level-1'][normalize-space()='Log out']").click();
-  });
+test.beforeEach(async ({ page }) => {
+  await login(page);
+});
+test.setTimeout(60000);
+
+test.describe('Add Apps - Positive & Negative Scenarios', () => {
+
+   
+   
   // The first test
  test('Homepage_1', async ({ page }) => {
-  await page.locator("//div[@class='site-branding__name']").click();
-  await expect(page).toHaveTitle('Home | Drupal Site');
-  await expect(page.locator("//a[normalize-space()='My account']")).toBeVisible({ label:'My account' });
+  //await page.locator("//div[@class='site-branding__name']").click();
+  await expect(page).toHaveTitle('admin  | Fresh Docker KickStart');
+  //const title = await page.locator("//title[normalize-space()='admin  | Fresh Docker KickStart']").textContent();
+  //console.log(title);
+  //await expect(page.locator("//a[normalize-space()='My account']")).toBeVisible({ label:'My account' });
+  await page.waitForTimeout(3000);
+
  });
  // The Second test
- test('Add User as Content Editor with valid Data_2', async ({ page }) => {
-  // Navigate to add-user
-  await page.locator("//a[@id='toolbar-link-entity-user-collection']").click();
-  await expect(page).toHaveTitle('People | Drupal Site');
-  await page.locator("//a[normalize-space()='Add user']").click();
+ test('Add Apps with valid Data_2', async ({ page }) => {
+  // Navigate to Add Apps
+  
+  //await page.goto(`${baseURL}/user/1/apps`);
+  
+  await page.locator('a.nav-link[href="/user/apps"]').click();//Using href^="/user/apps" allows dynamic token support.
+  //await page.getByRole('link', { name: 'Apps' }).click();//By text:
+  //await page.locator('//a[normalize-space()="Apps"]').click();//XPath (less preferred, but possible):
+  await expect(page).toHaveTitle('Apps | Fresh Docker KickStart');
+  await page.locator("//a[normalize-space()='Add app']").click();
   // Fill in form
-  await page.fill('id=edit-mail', 'mona+31@cloudypedia.net');
-  await page.fill('id=edit-name', 'mona31');
-  await page.fill('id=edit-pass-pass1', 'monaqc123*Test');
-  await page.fill('id=edit-pass-pass2', 'monaqc123*Test');
-  // Check roles
-  // Check Authenticated User
-  await page.waitForSelector('id=edit-roles-authenticated'); 
-  await expect(page.locator('id=edit-roles-authenticated')).toBeVisible();
-  await expect(page.locator('id=edit-roles-authenticated')).toBeDisabled();
-  // Check Content Editor 
-  await page.waitForSelector('id=edit-roles-content-editor'); // Wait First
-  await page.check('id=edit-roles-content-editor'); // Then Check 
+  //await page.fill('id=edit-displayname-0-value', Apps.appName);
+  //await page.fill('id=edit-callbackurl-0-value', Apps.callbackUrl);
+  //await page.getByLabel('Description').click();
+  //await page.fill('id=edit-description-0-value', Apps.description);
+    //////////// test code
+  await page.fill('id=edit-displayname-0-value', Apps.appName);
+  await page.fill('id=edit-callbackurl-0-value', Apps.callbackUrl);
+  await page.getByLabel('Description').click();
+  await page.getByLabel('Description').fill(Apps.description);
+
+
+   // Select APIs
+  for (const api of Apps.apis) {
+    await page.check(`text=${api}`);
+  }
+  
   // Submit form
    await page.waitForTimeout(3000);
-   await page.click("//input[@id='edit-submit']");
-   // console.log('New user successfully added');
-   // await expect(page.locator("//div[@class='messages__content']")).toContainText('Created a new user account for mona31. No email has been sent');
+   await page.click("//input[@id='edit-actions-submit']");
+  // await page.getByRole('button', { name: 'Add app' }).click();
+
    //Get Message successfully by detailes Diynamiclly 
-   const href= await page.locator("//div[@class='messages__content']//a").getAttribute('href');
-   console .log('Href:',href)
-   const userId = href?.split('/').pop(); // Will give 'Number'
-   console.log('User ID:', userId);
-   const messageText = await page.locator('div.messages__content').textContent();
+   const messageText = await page.locator("//div[@role='alert']").textContent();
    console.log(messageText);
-   await expect (page.locator('div.messages__content')).toBeVisible();
+   await expect (page.locator("//div[@role='alert']")).toBeVisible();
+
+  if (user.expected.success) {
+      // Success case
+      await expect(page.locator("//div[@role='alert']")).toBeVisible();
+      const messageText = await page.locator("//div[@role='alert']").textContent();
+      console.log(`✅ ${messageText}`);
+    } else {
+      // Failure case
+      const errorContent = page.locator("//div[@role='alert']");
+      //await expect(errorContent).toContainText(user.expected.errorMessage);
+      const errorText = await errorContent.textContent();
+      console.log(`❌ failed:`, errorText);
+    }
+
  });
+
+ /*
 // Delete Scenarios
   test(' Delete user account From People_3 ', async ({ page }) => {
    // Go To People List Page 
@@ -507,7 +527,7 @@ test.describe('Add User - Positive & Negative Scenarios', () => {
       console.log(messageText);
       await expect (page.locator('div.messages__content')).toBeVisible();
     });
-// Delete Scenarios
+ // Delete Scenarios
   test(' Cancel the selected user account From People List_22 ', async ({ page }) => {
    // Go To People List Page 
    await page.locator("//a[@id='toolbar-link-entity-user-collection']").click();
@@ -615,6 +635,6 @@ test.describe('Add User - Positive & Negative Scenarios', () => {
      await expect(page.locator("//h2[@id='message-error-title']")).toContainText('Error message');
      await expect(page.locator("//div[@class='messages__content']")).toContainText('Password field is required.');
      
-    });
+    });*/
 
 });

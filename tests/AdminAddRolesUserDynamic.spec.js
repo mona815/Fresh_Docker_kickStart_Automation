@@ -48,28 +48,9 @@ for (const user of users) {
     const href= await page.locator("//div[@class='messages__content']//a").getAttribute('href');
     console .log('Href:',href)
     const userId = href?.split('/').pop(); // Will give 'Number'
+    fs.writeFileSync('tests/data/last-user-id.json', JSON.stringify({ userId }));
+
     console.log('User ID:', userId);
   });
-
-/*test('Show Error when User Name is empty_4', async ({ page }) => {
-     await page.locator("//a[@id='toolbar-link-entity-user-collection']").click();
-     await page.locator("//a[normalize-space()='Add user']").click();
-     // Fill in form
-     await page.fill('id=edit-mail',user.email);
-     await page.fill('id=edit-pass-pass1', user.password);
-     await page.fill('id=edit-pass-pass2', user.password);
-     await page.click("//input[@id='edit-submit']");
-
-     // Alert  Message  Data required to fill 
-     const isValid = await page.locator('id=edit-name').evaluate((input) => input.checkValidity());
-
-     if (!isValid) {
-      console.log('Field is invalid');
-      console.log('please fill out this field');
-     }
-
-    });*/
-
-
 
 }

@@ -1,11 +1,16 @@
 
 const { test, expect } = require('@playwright/test');
+//const fs = require('fs');
 require('dotenv').config();
 
 const baseURL = process.env.BASE_URL || 'http://localhost:8080';
+// Load users from JSON file
+//const users = JSON.parse(fs.readFileSync('tests/data/users.json', 'utf-8'));
+
 //const validPic = 'tests/assets/validEsoo.jpg';
 //const invalidPic = 'tests/assets/invalid.bmp';
-const userId = 40;
+//const userId = 40;
+let  userId ;
 const invaliduserId = 99999;
 
 async function login(page) {
@@ -20,22 +25,58 @@ test.beforeEach(async ({ page }) => {
 });
 test.setTimeout(60000);
 
-/*
-// Edit Scenarios
-test('Update UserName and Email', async ({ page }) => {
-  await page.goto(`${baseURL}/user/${userId}/edit`);
-  // Fill Form 
-    await page.fill('id=edit-mail', user.email);
-    await page.fill('id=edit-name', user.username);
-    await page.fill('id=edit-pass-pass1', user.password);
-    await page.fill('id=edit-pass-pass2', user.password);
-    page.click('input#edit-submit');
-  await expect(page.locator('.messages--status')).toContainText('has been updated');
-});
-*/
-// Block User Scenarios From Inside Edit Form
+test('Add User To Get userId ', async ({ page }) => {
+   // Navigate to add-user
+   await page.locator("//a[@id='toolbar-link-entity-user-collection']").click();
+   await expect(page).toHaveTitle('People | Drupal Site');
+   await page.locator("//a[normalize-space()='Add user']").click();
+   // Fill in form
+   await page.fill('id=edit-mail', 'mona+7000@cloudypedia.net');
+   await page.fill('id=edit-name', 'mona7000');
+   await page.fill('id=edit-pass-pass1', 'monaqc123*Test');
+   await page.fill('id=edit-pass-pass2', 'monaqc123*Test');
+   // Submit form
+   await page.waitForTimeout(3000);
+   await page.click("//input[@id='edit-submit']");
+   await expect(page.locator("//div[@role='status']")).toContainText('Created a new user account for');
+   //await page.waitForTimeout(60000);
 
-test('Block User Inside Edit Form_1 ', async ({ page }) => {
+   //Get Message successfully by detailes Diynamiclly 
+   const href= await page.locator("//div[@class='messages__content']//a").getAttribute('href');
+   console .log('Href:',href)
+   userId = href?.split('/').pop(); // Will give 'Number'
+   console.log('User ID:', userId);
+   const messageText = await page.locator('div.messages__content').textContent();
+   console.log(messageText);
+   await expect (page.locator('div.messages__content')).toBeVisible();
+ });
+ // Edit UserName and Email  Scenarios
+test('Update UserName and Email', async ({ page }) => {
+  // Make sure it's available
+  if (!userId) {
+    throw new Error('User ID not available from previous test!');
+  }
+  await page.goto(`${baseURL}/user/${userId}/edit`);
+  console.log(`Navigated to edit page of user ID: ${userId}`);
+  await expect(page).toHaveURL(/\/edit$/);
+  // Fill Form 
+    await page.fill('id=edit-mail', 'mona+8000@cloudypedia.net');
+    await page.fill('id=edit-name', 'mona8000');
+    await page.fill('id=edit-pass-pass1', 'monaqc123*Test');
+    await page.fill('id=edit-pass-pass2', 'monaqc123*Test');
+    page.click('input#edit-submit');
+  await expect(page.locator('.messages--status')).toContainText('The changes have been saved.');
+});
+
+ // Block User Scenarios From Inside Edit Form
+
+ test('Block User Inside Edit Form_1 ', async ({ page }) => {
+
+  // Make sure it's available
+  if (!userId) {
+    throw new Error('User ID not available from previous test!');
+  }
+  // Example: Go to user edit page
   await page.goto(`${baseURL}/user/${userId}/edit`);
    // Check user Activation 
    await expect(page.locator('id=edit-status-1')).toBeChecked();
@@ -46,8 +87,14 @@ test('Block User Inside Edit Form_1 ', async ({ page }) => {
     const message = await page.locator('div.messages__content').textContent();
     console.log(message);
 });
+
 // UnBlock User Scenarios From Inside Edit Form
 test('UnBlock User Inside Edit Form_2 ', async ({ page }) => {
+  // Make sure it's available
+  if (!userId) {
+    throw new Error('User ID not available from previous test!');
+  }
+    //Go to page Edit
   await page.goto(`${baseURL}/user/${userId}/edit`);
 
    // Check user Block 
@@ -192,7 +239,7 @@ test(' Cancel the selected user account From People List_11 ', async ({ page }) 
     console.log(message);
 
     await expect(page.locator("//body")).toBeVisible();
-    
+  
 });
 
 // Cancele Delete

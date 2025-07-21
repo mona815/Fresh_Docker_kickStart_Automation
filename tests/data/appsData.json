@@ -1,0 +1,42 @@
+[
+  {
+    "appName": "Test Add New App_3",
+    "callbackUrl": "https://example.com/oauth/callback",
+    "description": "This is a sample app used for automated testing with Playwright.",
+    "apis": ["task API"],
+    "expected": {
+      "success": true
+    }
+  },
+  {
+    "appName": "App Name Already Exists",
+    "callbackUrl": "https://example.com/oauth/callback",
+    "description": "This is a sample app used for automated testing with Playwright.",
+    "apis": ["task API"],
+    "expected": {
+      "success": true
+    }
+  },
+
+  {
+    "appName": "App Name Already Exists",
+    "callbackUrl": "https://example.com/oauth/callback",
+    "description": "This is a sample app used for automated testing with Playwright.",
+    "apis": ["task API"],
+    "expected": {
+      "success": false,
+      "errorMessage": "The App Name existing is already taken.The machine-readable name is already in use. It must be unique."
+    }
+  },
+  {
+    "appName": "Invalid callbackUrl Format",
+    "callbackUrl": "www.example.com/oauth/callback",
+    "description": "This is a sample app used for automated testing with Playwright.",
+    "apis": ["task API"],
+    "expected": {
+      "success": false,
+      "errorMessage": "This value is not a valid callbackUrl address."
+    }
+  }
+  
+]
